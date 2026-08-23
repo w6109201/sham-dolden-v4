@@ -1,8 +1,6 @@
 // Central contact and social links loaded by public pages.
 (function () {
-    const API_URL = window.location.protocol === "file:"
-        ? "http://localhost:5000/api"
-        : `${window.location.origin}/api`;
+    const API_URL = window.location.protocol === "file:" ? "http://localhost:5000/api" : `${window.location.origin}/api`;
 
     const defaults = {
         phone: "",

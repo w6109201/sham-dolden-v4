@@ -2,7 +2,7 @@
 // الشام الذهبي | معرض المشاريع والصور الشامل
 // ==========================================
 
-const API = "http://localhost:5000/api";
+const API = window.location.protocol === "file:" ? "http://localhost:5000/api" : `${window.location.origin}/api`;
 
 document.addEventListener("DOMContentLoaded", () => {
     loadGalleryProjects("الكل");

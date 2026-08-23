@@ -2,7 +2,7 @@
 // الشام الذهبي | الملف البرمجي الشامل للرئيسية
 // ==========================================
 
-const API = "http://localhost:5000/api";
+const API = window.location.protocol === "file:" ? "http://localhost:5000/api" : `${window.location.origin}/api`;
 let featuredProjects = [];
 let featuredIndex = 0;
 let featuredTimer = null;

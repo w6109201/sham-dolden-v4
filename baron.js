@@ -2,7 +2,7 @@
 // لوحة البارون | الشام الذهبي
 // سيرفر محلي فقط — بدون Supabase
 // ==========================================
-const LOCAL_API = "http://localhost:5000/api";
+const LOCAL_API = window.location.protocol === "file:" ? "http://localhost:5000/api" : `${window.location.origin}/api`;
 
 async function api(path, options = {}) {
   const opts = { ...options };

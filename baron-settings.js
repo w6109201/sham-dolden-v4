@@ -1,7 +1,7 @@
 // ==========================================
 // إعدادات لوحة التحكم - متوافقة مع سيرفر Node.js & MySQL
 // ==========================================
-const API_URL = "http://localhost:5000/api";
+const API_URL = window.location.protocol === "file:" ? "http://localhost:5000/api" : `${window.location.origin}/api`;
 
 document.addEventListener("DOMContentLoaded", () => {
     loadBaronSettings();

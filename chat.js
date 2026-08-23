@@ -1,4 +1,4 @@
-const API = "http://localhost:5000/api";
+const API = window.location.protocol === "file:" ? "http://localhost:5000/api" : `${window.location.origin}/api`;
 let allMessages = [];
 let activeId = null;
 const initialParams = new URLSearchParams(location.search);

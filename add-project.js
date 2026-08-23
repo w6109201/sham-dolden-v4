@@ -18,7 +18,8 @@ function buildModelCode(category, number) {
 // جلب الرقم التسلسلي التالي من السيرفر المحلي
 async function getNextModelNumber(category) {
   try {
-    const res = await fetch(`http://localhost:5000/api/projects`);
+    const apiUrl = window.location.protocol === "file:" ? "http://localhost:5000/api" : `${window.location.origin}/api`;
+    const res = await fetch(`${apiUrl}/projects`);
     const data = await res.json();
 
     // تصفية المشاريع حسب القسم الحالي فقط
@@ -158,7 +159,8 @@ if (form) {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/projects", {
+      const apiUrl = window.location.protocol === "file:" ? "http://localhost:5000/api" : `${window.location.origin}/api`;
+      const response = await fetch(`${apiUrl}/projects`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(row)

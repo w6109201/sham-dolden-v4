@@ -2,7 +2,7 @@
 // مجيب الشام الذهبي | bot.js (النسخة المتوافقة مع سيرفر Node.js المحلي)
 // ==========================================
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = window.location.protocol === "file:" ? "http://localhost:5000/api" : `${window.location.origin}/api`;
 
 const chatBox = document.getElementById("chat-box");
 const userInput = document.getElementById("user-input");
@@ -14,7 +14,7 @@ let botResponsesData = [];
 // ==================== التشغيل ====================
 document.addEventListener("DOMContentLoaded", async () => {
     await fetchBotResponses();
-    
+
     // إذا جاء كود من الرابط ?code=DC-1 أو dc-1
     const urlParams = new URLSearchParams(window.location.search);
     const codeParam = urlParams.get("code");
@@ -94,7 +94,7 @@ async function fetchBotResponses() {
     try {
         const response = await fetch(`${API_URL}/bot-replies`);
         const data = await response.json();
-        
+
         if (Array.isArray(data) && data.length > 0) {
             // تصفية الردود المفعلة فقط
             botResponsesData = data.filter(item => item.is_active == 1 || item.is_active === true);
@@ -110,7 +110,7 @@ async function fetchBotResponses() {
 function renderQuickButtonsFromData(data) {
     if (!quickButtonsContainer) return;
     quickButtonsContainer.innerHTML = "";
-    
+
     data.forEach((item) => {
         if (!item.trigger_keyword) return;
         const btnText = item.trigger_keyword.trim();
@@ -126,9 +126,9 @@ function renderQuickButtonsFromData(data) {
 async function processQuery(userText) {
     const typing = showTyping();
     const textLower = userText.toLowerCase().trim();
-    
+
     await new Promise((r) => setTimeout(r, 450));
-    
+
     // 1) فحص كود الموديل مثل DC-1 أو KD-1 أو GB-2
     const codeMatch = userText.match(/([A-Za-z]+)[-\s]?(\d+)/i);
     if (codeMatch) {
@@ -137,29 +137,29 @@ async function processQuery(userText) {
         await fetchModelByCode(fullQueryCode);
         return;
     }
-    
+
     // 2) مطابقة الكلمات المفتاحية من الردود المحملة
     let matchedResponse = null;
     for (const item of botResponsesData) {
         if (!item.trigger_keyword) continue;
-        
+
         const keywords = item.trigger_keyword
             .split(",")
             .map((k) => k.trim().toLowerCase())
             .filter(Boolean);
-        
+
         const isMatched = keywords.some(
             (keyword) => textLower.includes(keyword) || keyword.includes(textLower)
         );
-        
+
         if (isMatched) {
             matchedResponse = item;
             break;
         }
     }
-    
+
     typing.remove();
-    
+
     if (matchedResponse) {
         appendBotMsg(matchedResponse.reply_text || "تم العثور على رد.");
     } else {
@@ -176,17 +176,17 @@ async function fetchModelByCode(modelCode) {
     try {
         const response = await fetch(`${API_URL}/projects`);
         const projects = await response.json();
-        
+
         if (!Array.isArray(projects)) {
             appendBotMsg("عذراً، حدث خطأ في استقبال بيانات المشاريع.");
             return;
         }
-        
+
         // البحث عن المشروع الذي يتطابق معه الـ model_code
-        const foundProject = projects.find(p => 
+        const foundProject = projects.find(p =>
             p.model_code && p.model_code.toLowerCase() === modelCode.toLowerCase()
         );
-        
+
         if (!foundProject) {
             appendBotMsg(
                 "لم نتمكن من العثور على الموديل <b>" +
@@ -195,7 +195,7 @@ async function fetchModelByCode(modelCode) {
             );
             return;
         }
-        
+
         renderProductCard(foundProject, modelCode.toUpperCase());
     } catch (err) {
         console.error(err);
@@ -206,17 +206,17 @@ async function fetchModelByCode(modelCode) {
 // ==================== عرض بطاقة الموديل ====================
 function renderProductCard(item, fullCode) {
     let imgUrl = item.cover_image || "";
-    
+
     if (!imgUrl || imgUrl.trim() === "") {
         imgUrl = "https://placehold.co/600x400/18181c/d4af37?text=الشام+الذهبي";
     }
-    
+
     const priceText = item.price ? item.price + " ل.س" : "حسب المقاس والطلب";
     const title = item.title || "موديل ديكور";
     const city = item.city || "";
-    
+
     const waText = encodeURIComponent("استفسار عن موديل: " + fullCode + " - " + title);
-    
+
     appendBotMsg(
         "طلب استفسار عن موديل 🖼️<br>" +
         "• <b>الاسم:</b> " + escapeHtml(title) + "<br>" +

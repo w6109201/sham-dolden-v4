@@ -1,4 +1,4 @@
-const CONTACT_API = "http://localhost:5000/api";
+const CONTACT_API = window.location.protocol === "file:" ? "http://localhost:5000/api" : `${window.location.origin}/api`;
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("contactForm");

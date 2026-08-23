@@ -1,4 +1,4 @@
-const API = "http://localhost:5000/api";
+const API = window.location.protocol === "file:" ? "http://localhost:5000/api" : `${window.location.origin}/api`;
 
 // ==========================================
 // 2. التشغيل عند تحميل الصفحة

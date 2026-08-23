@@ -32,7 +32,8 @@ function updateThemeIcon(isLight) {
 // ==========================================
 async function load3DProjects() {
     try {
-        const response = await fetch('http://localhost:5000/api/projects');
+        const apiUrl = window.location.protocol === "file:" ? "http://localhost:5000/api" : `${window.location.origin}/api`;
+        const response = await fetch(`${apiUrl}/projects`);
         if (!response.ok) throw new Error("فشل الاتصال بالسيرفر المحلي");
 
         const allProjects = await response.json();

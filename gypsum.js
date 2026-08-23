@@ -2,7 +2,7 @@
 // الشام الذهبي | صفحة الجبس بورد (gb)
 // ==========================================
 
-const API = "http://localhost:5000/api";
+const API = window.location.protocol === "file:" ? "http://localhost:5000/api" : `${window.location.origin}/api`;
 let allGypsumProjects = [];
 
 function toggleMenu() {
